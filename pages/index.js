@@ -8,7 +8,7 @@ import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 // Data and services:
 import { getSortedPostsData } from '../lib/posts'
-
+import staticInfo from '../data/staticInfo.json'
 
 export default function Home({ allPostsData }) {
   return (
@@ -34,6 +34,22 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 <Date dateString={date} />
+              </small>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Projects</h2>
+        <ul className={utilStyles.list}>
+          {staticInfo.projects.map(({ name }) => (
+            <li className={utilStyles.listItem} key={name}>
+                <Link href="/projects/[project]" as={`/projects/${name}`}>
+                  <a>{name}</a>
+                </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                <p>This is {name}</p>
               </small>
             </li>
           ))}
