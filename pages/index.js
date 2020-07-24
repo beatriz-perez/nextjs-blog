@@ -1,4 +1,5 @@
 // Modules:
+import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 import Link from 'next/link'
 import Date from '../components/date'
@@ -10,7 +11,7 @@ import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 import staticInfo from '../data/staticInfo.json'
 
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData, data }) {
   return (
     <Layout home>
       <Head>
@@ -18,6 +19,8 @@ export default function Home({ allPostsData }) {
       </Head>
       <section className={utilStyles.headingMd}>
         <p>Hola! I am Beatriz, a junior software developer and architect getting started with Next.js</p>
+        <p>{data}</p>
+
         <p>
           (This is a sample website - you’ll be building a site like this on{' '}
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
@@ -59,11 +62,17 @@ export default function Home({ allPostsData }) {
   )
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ req }) {
   const allPostsData = getSortedPostsData()
+
+  const baseUrl = req ? `${req.protocol}://${req.get('Host')}` : '';
+  const res = await fetch(`${baseUrl}/api/hello`)
+  const data = await res.json()
+
   return {
     props: {
-      allPostsData
+      allPostsData,
+      data
     }
   }
 }
